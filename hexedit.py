@@ -711,6 +711,7 @@ def set_attributes(file, slot, lvls, cheat=False):
         char_slot = get_slot_ls(file)[slot - 1]
         dat_slices = get_slot_slices(file)[slot - 1]
 
+        dat = None
         for i in ind_ls:
             dat = (
                 dat_slices[0]
@@ -720,7 +721,8 @@ def set_attributes(file, slot, lvls, cheat=False):
                 + dat_slices[1]
             )
 
-        write_save_bytes(file, dat, backup_label="set-attributes")
+        if dat is not None:
+            write_save_bytes(file, dat, backup_label="set-attributes")
 
     recalc_checksum(file)
 
@@ -822,9 +824,9 @@ def set_play_time(file,slot,time):
     # time = [hr,min,sec]
     time = [int(i) for i in time]
     hr = time[0]
-    min = time[1]
+    minute_val = time[1]
     sec = time[2]
-    seconds = sec + (min*60) + (hr*3600)
+    seconds = sec + (minute_val*60) + (hr*3600)
     time1 = 0x1901d0e+38
     time2 = 0x1901f5a+38
     time3 = 0x19021a6+38
@@ -1004,3 +1006,4 @@ def set_runes(file, char_slot, old_quantity, new_quantity):
 
     write_save_bytes(file, data, backup_label="set-runes")
     recalc_checksum(file)
+    return True
