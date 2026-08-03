@@ -33,12 +33,15 @@ This project builds on community knowledge and prior Elden Ring save-editing wor
 - Automatic backups before save-modifying operations.
 - Checksum recalculation and validation to reduce `Save Data Corrupted` risk.
 - External JSON item catalog for base game + DLC items.
+- Stats editor, and change starting class.
 - Inventory Pro with search by name, category, source, Goods ID, Raw ID, and internal IDs.
 - Quantity Editor to view current item quantities and increase, decrease, or set exact values.
 - Real inventory scanner with JSON/Markdown reports.
 - Backup Browser for reviewing and restoring backups.
 
 ## Download
+
+### Windows
 
 The recommended way for end users is to download the executable from **GitHub Releases**.
 
@@ -52,10 +55,13 @@ EldenRingSaveManager.exe
 
 On first launch, the executable creates a `data/` folder next to the `.exe` for local settings, backups, reports, and save profiles.
 
+### Linux
+See [Run From Source](#run-from-source)
+
 ## Quick Start
 
 1. Close Elden Ring before modifying saves.
-2. Open `EldenRingSaveManager.exe`.
+2. Open `EldenRingSaveManager.exe` (or `run.sh` if on linux).
 3. Set your save folder through `Edit > Change Default Directory`.
 4. Set your SteamID through `Edit > Change Default SteamID`.
 5. If you use Seamless Co-op, enable `File > Seamless Co-op Mode`.
@@ -75,9 +81,11 @@ On first launch, the executable creates a `data/` folder next to the `.exe` for 
 
 Requirements:
 
-- Windows 10/11
+- If Windows, then Windows 10/11
 - Python 3.11 or newer
 - Python with Tcl/Tk support
+
+### Windows
 
 Install dependencies and run:
 
@@ -92,7 +100,26 @@ python -m pip install -r requirements.txt
 python app.py
 ```
 
-## Build Executable
+### Linux
+
+Install dependencies (especially tkinter)
+then:
+```bash
+python -m pip install -r requirements.txt
+python -m venv .venv
+```
+> [!NOTE]
+> Some distros let you run python bare, while others insist on a sandboxed mode.  Most Arch-based distros are sandboxed.  There are 2 .sh files for this purpose.
+```bash
+# for barebones
+run-bare.sh
+```
+```bash
+# for sandboxed
+run-sandboxed.sh
+```
+
+## Build Windows Executable
 
 ```powershell
 .\build_exe.ps1
