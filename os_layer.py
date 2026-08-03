@@ -20,7 +20,27 @@ update_dir = data_dir("updates")
 temp_dir = data_dir("temp")
 post_update_file = str(data_path("post.update"))
 gamesavedir_txt = str(data_path("GameSaveDir.txt"))
-eldenring_savedata_dir = str(Path.home() / "AppData" / "Roaming" / "EldenRing")
+
+def _default_er_savedata_dir() -> str:
+    override = os.environ.get("ER_SAVEDATA_DIR")
+    if override and Path(override).is_dir():
+        return override
+    if platform.system() == "Windows":
+        return str(Path.home() / "AppData" / "Roaming" / "EldenRing")
+    rel = Path("steamapps/compatdata/1245620/pfx/drive_c/users"
+               "/steamuser/AppData/Roaming/EldenRing")
+    roots = [
+        Path.home() / ".steam/steam",
+        Path.home() / ".local/share/Steam",
+        Path.home() / ".var/app/com.valvesoftware.Steam/data/Steam",  # flatpak
+    ]
+    for root in roots:
+        if (root / rel).is_dir():
+            return str(root / rel)
+    return str(Path.home())
+
+eldenring_savedata_dir = _default_er_savedata_dir()
+
 version = "v1.73"
 v_num = 1.73  # Used for checking version for update
 video_url = "https://youtu.be/LQxmFuq3dfg"
@@ -53,7 +73,7 @@ def force_close_process(process):
         comm = f"taskkill /IM {process} -F"
         subprocess.run(comm, shell=True, capture_output=True, text=True)
     else:
-        comm = f"pkill {process}"
+        comm = f"pkill -f {process}"
         os.system(comm)
 
 

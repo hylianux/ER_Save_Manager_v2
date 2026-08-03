@@ -845,13 +845,27 @@ def set_play_time(file,slot,time):
     write_save_bytes(file, ch, backup_label="set-play-time")
     recalc_checksum(file)
 
+def _find_class_offset(cs, char_name):
+    """arche_type = name_start + 0x20 (name) + 0x2 (pad) + 0x1 (gender)."""
+    if not char_name:
+        return None
+    needle = char_name.encode("utf-16-le")
+    idx = cs.find(needle)
+    while idx != -1:
+        pos = idx + 0x23
+        if pos < len(cs) and cs[pos] <= 9 and cs[pos - 1] in (0, 1):
+            return pos
+        idx = cs.find(needle, idx + 2)
+    return None
 
 def set_starting_class(file, slot, char_class):
     cs = get_slot_ls(file)[slot - 1]
     slices = get_slot_slices(file)
     s_start = slices[slot - 1][0]
     s_end = slices[slot - 1][1]
-    pos = 42165 # class flag is 42165 bytes from start of character block
+    pos = _find_class_offset(cs, get_names(file)[slot - 1])
+    if pos is None:
+        raise ValueError("could not locate class byte - refusing to write")
     classes = {"Vagabond":0, "Warrior":1, "Hero":2, "Bandit":3, "Astrologer":4,
                 "Prophet":5, "Confessor":6, "Samurai":7, "Prisoner":8, "Wretch":9
                 }

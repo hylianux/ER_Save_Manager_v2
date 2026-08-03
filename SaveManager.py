@@ -17,7 +17,7 @@ from pathlib import Path as PATH
 #Collapse all functions to navigate. In Atom editor: "Edit > Folding > Fold All"
 
 Toplevel = main_window.ToplevelBase
-NEXUS_BUILD = True
+NEXUS_BUILD = os.environ.get("ER_SAVE_MANAGER_NEXUS_BUILD") == "1"
 
 
 # set always the working dir to the correct folder for unix env
