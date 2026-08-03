@@ -17,7 +17,7 @@ from pathlib import Path as PATH
 #Collapse all functions to navigate. In Atom editor: "Edit > Folding > Fold All"
 
 Toplevel = main_window.ToplevelBase
-NEXUS_BUILD = os.environ.get("ER_SAVE_MANAGER_NEXUS_BUILD") == "1"
+NEXUS_BUILD = True
 
 
 # set always the working dir to the correct folder for unix env
@@ -2334,10 +2334,10 @@ def change_default_steamid_menu():
 
     def done():
         s_steam_id_val = ent.get()
-        if not len(s_id) == 17:
+        if not len(s_steam_id_val) == 17:
             popup("SteamID should be 17 digits long")
             return
-        config.set("steamid", s_id)
+        config.set("steamid", s_steam_id_val)
 
 
         popup("Successfully changed default SteamID")
@@ -3676,6 +3676,7 @@ def main():
     toolsmenu = Menu(menubar, tearoff=0)
     toolsmenu.add_command(label="Character Manager", command=char_manager_menu)
     toolsmenu.add_command(label="Stat Editor", command=stat_editor_menu)
+    toolsmenu.add_command(label="Set Starting Class", command=set_starting_class_menu)
     toolsmenu.add_command(label="Inventory Editor", command=inventory_editor_menu)
     toolsmenu.add_command(label="Inventory Pro", command=inventory_pro_menu)
     toolsmenu.add_command(label="Quantity Editor", command=quantity_editor_menu)
